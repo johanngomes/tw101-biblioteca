@@ -22,6 +22,7 @@ public class BookHelper {
     }
 
     public static void checkInBook(String title) throws BookIsAlreadyCheckedIn, BookNotFound {
+
         for (Book book : books) {
             if ( book.getTitle().equals(title.toUpperCase()) ) {
                 if ( book.isCheckedOut() == false ) {
@@ -34,11 +35,13 @@ public class BookHelper {
                 }
             }
         }
+
         throw new BookNotFound(String.format("%s not found in the library!", title.toUpperCase()));
+
     }
 
     public static void checkOutBook(String title) throws BookIsAlreadyCheckedOut, BookNotFound{
-        System.out.println(title);
+
         for (Book book : books) {
             if ( book.getTitle().equals(title.toUpperCase()) ) {
                 if ( book.isCheckedOut() == true ) {
@@ -51,7 +54,9 @@ public class BookHelper {
                 }
             }
         }
+
         throw new BookNotFound(String.format("%s not found in the library!", title.toUpperCase()));
+
     }
 
     public static void eraseBookList() {

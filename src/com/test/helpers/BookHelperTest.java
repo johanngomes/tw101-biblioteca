@@ -61,7 +61,7 @@ public class BookHelperTest {
         BookHelper.checkOutBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected=BookNotFound.class)
+    @Test(expected = BookNotFound.class)
     public void checkOutBookNotFoundNotEmptyList() throws BookNotFound, BookIsAlreadyCheckedOut {
         BookHelper.eraseBookList();
         Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, checkedOut);
@@ -70,7 +70,7 @@ public class BookHelperTest {
         BookHelper.checkOutBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected=BookNotFound.class)
+    @Test(expected = BookNotFound.class)
     public void checkOutBookNotFoundEmptyList() throws BookNotFound, BookIsAlreadyCheckedOut {
         BookHelper.eraseBookList();
 
@@ -90,7 +90,7 @@ public class BookHelperTest {
         BookHelper.checkInBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected=BookNotFound.class)
+    @Test(expected = BookNotFound.class)
     public void checkInBookNotFoundNotEmptyList()  throws BookNotFound, BookIsAlreadyCheckedIn {
         BookHelper.eraseBookList();
         Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, checkedOut);
@@ -99,7 +99,7 @@ public class BookHelperTest {
         BookHelper.checkInBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected=BookNotFound.class)
+    @Test(expected = BookNotFound.class)
     public void checkInBookNotFoundEmptyList() throws BookNotFound, BookIsAlreadyCheckedIn {
         BookHelper.eraseBookList();
 

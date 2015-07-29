@@ -1,9 +1,10 @@
 package com.app.helpers;
 
-import com.app.custom.BookIsAlreadyCheckedIn;
-import com.app.custom.BookIsAlreadyCheckedOut;
-import com.app.custom.BookNotFound;
+import com.app.exceptions.BookIsAlreadyCheckedIn;
+import com.app.exceptions.BookIsAlreadyCheckedOut;
+import com.app.exceptions.BookNotFound;
 import com.app.models.Book;
+import com.app.models.User;
 
 import java.util.ArrayList;
 
@@ -13,12 +14,16 @@ import java.util.ArrayList;
 public class BookHelper {
     private static ArrayList<Book> books = new ArrayList<Book>();
 
-    public static void addBook(Book book){
+    public static void addItem(Book book) {
         books.add(book);
     }
 
     public static ArrayList<Book> getBooks() {
         return books;
+    }
+
+    public static void eraseBookList() {
+        books.clear();
     }
 
     public static void checkInBook(String title) throws BookIsAlreadyCheckedIn, BookNotFound {
@@ -31,6 +36,7 @@ public class BookHelper {
                 }
                 else {
                     book.setCheckedOut(false);
+                    book.setCheckedOutBy(null);
                     return;
                 }
             }
@@ -40,7 +46,7 @@ public class BookHelper {
 
     }
 
-    public static void checkOutBook(String title) throws BookIsAlreadyCheckedOut, BookNotFound{
+    public static void checkOutBook(String title, User user) throws BookIsAlreadyCheckedOut, BookNotFound{
 
         for (Book book : books) {
             if ( book.getTitle().equals(title.toUpperCase()) ) {
@@ -50,6 +56,7 @@ public class BookHelper {
                 }
                 else {
                     book.setCheckedOut(true);
+                    book.setCheckedOutBy(user);
                     return;
                 }
             }
@@ -58,9 +65,4 @@ public class BookHelper {
         throw new BookNotFound(String.format("%s not found in the library!", title.toUpperCase()));
 
     }
-
-    public static void eraseBookList() {
-        books.clear();
-    }
-
 }

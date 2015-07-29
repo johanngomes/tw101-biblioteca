@@ -1,7 +1,7 @@
 package com.test.helpers;
 
-import com.app.custom.NoBookRegisteredInSystem;
-import com.app.custom.OptionNotAvailable;
+import com.app.exceptions.NoBookRegisteredInSystem;
+import com.app.exceptions.OptionNotAvailable;
 import com.app.helpers.BookHelper;
 import com.app.helpers.MenuHelper;
 import com.app.seeds.BookSeed;

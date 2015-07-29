@@ -11,27 +11,26 @@ public class BookTest {
     public String sampleTitle = "HARRY POTTER AND THE CHAMBER OF SECRETS";
     public String sampleAuthor = "J.K. ROWLING";
     public int sampleYear = 2001;
-    public boolean checkedOut = false;
+    public boolean sampleCheckedOut = false;
 
     @Test
     public void testCreateBookObject() {
-        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, checkedOut);
+        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
         Assert.assertEquals(Book.class, book.getClass());
     }
 
     @Test
     public void testCreateBookWithoutCheckedOut() {
-        Book book = new Book(sampleTitle, sampleAuthor, sampleYear);
+        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
         Assert.assertEquals(Book.class, book.getClass());
         Assert.assertEquals(book.isCheckedOut(), false);
     }
 
     @Test
     public void testCreateBookCheckedOutTrue() {
-        checkedOut = true;
+        Boolean checkedOut = true;
         Book book = new Book(sampleTitle, sampleAuthor, sampleYear, checkedOut);
         Assert.assertEquals(Book.class, book.getClass());
         Assert.assertEquals(book.isCheckedOut(), true);
     }
-
 }

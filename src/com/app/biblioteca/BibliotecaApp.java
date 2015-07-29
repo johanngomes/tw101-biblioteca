@@ -1,10 +1,10 @@
 package com.app.biblioteca;
 
-import com.app.custom.BookIsAlreadyCheckedIn;
-import com.app.custom.BookIsAlreadyCheckedOut;
-import com.app.custom.BookNotFound;
-import com.app.custom.NoBookRegisteredInSystem;
-import com.app.custom.OptionNotAvailable;
+import com.app.exceptions.BookIsAlreadyCheckedIn;
+import com.app.exceptions.BookIsAlreadyCheckedOut;
+import com.app.exceptions.BookNotFound;
+import com.app.exceptions.NoBookRegisteredInSystem;
+import com.app.exceptions.OptionNotAvailable;
 import com.app.helpers.MenuHelper;
 import com.app.seeds.BookSeed;
 import java.util.Scanner;

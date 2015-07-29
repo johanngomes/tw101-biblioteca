@@ -3,28 +3,13 @@ package com.app.models;
 /**
  * Created by jgomes on 7/22/15.
  */
-public class Book {
-    private String title;
+public class Book extends Item {
     private String author;
-    private int year;
-    private boolean checkedOut = false;
 
-    public Book (String title, String author, int year, boolean... checkedOut) {
-        this.title = title.toUpperCase();
-        this.author = author.toUpperCase();
-        this.year = year;
+    public Book (String title, String author, Integer year, Boolean checkedOut) {
+        super(title, year, checkedOut);
 
-        if ( checkedOut.length > 0 ) {
-            this.checkedOut = checkedOut[0];
-        }
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        this.setAuthor(author);
     }
 
     public String getAuthor() {
@@ -32,22 +17,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = author.toUpperCase();
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public boolean isCheckedOut() {
-        return checkedOut;
-    }
-
-    public void setCheckedOut(boolean checkedOut) {
-        this.checkedOut = checkedOut;
-    }
 }

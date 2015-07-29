@@ -1,8 +1,9 @@
 package com.app.helpers;
 
-import com.app.custom.NoBookRegisteredInSystem;
-import com.app.custom.OptionNotAvailable;
+import com.app.exceptions.NoBookRegisteredInSystem;
+import com.app.exceptions.OptionNotAvailable;
 import com.app.models.Book;
+import com.app.models.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,15 @@ public class MenuHelper {
 
     private static Scanner userInput = new Scanner(System.in);
     private static ArrayList<String> mainOptions = new ArrayList(Arrays.asList("LIST BOOKS", "RETURN BOOK"));
+
+    private static User loggedUser = null;
+
+    public static void buildLoginScreen() {
+
+        //TO DO
+        //in this method, loggedUser must receive an User object of the User autheticated
+
+    }
 
     public static void buildMainOptionsMenu() throws NoBookRegisteredInSystem, OptionNotAvailable{
 
@@ -82,7 +92,7 @@ public class MenuHelper {
             String bookSelected = BookHelper.getBooks().get(currentInput - 1).getTitle();
             if (action == Action.CHECK_OUT) {
                 try {
-                    BookHelper.checkOutBook(bookSelected);
+                    BookHelper.checkOutBook(bookSelected, loggedUser);
                     MenuHelper.buildCheckOutMessage(true, bookSelected);
                 } catch (Exception BookIsAlreadyCheckedOut) {
                     MenuHelper.buildCheckOutMessage(false, bookSelected);

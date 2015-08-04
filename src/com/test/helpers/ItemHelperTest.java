@@ -1,29 +1,122 @@
 package com.test.helpers;
 
 import com.app.exceptions.*;
+import com.app.helpers.BookHelper;
 import com.app.helpers.ItemHelper;
 import com.app.helpers.MovieHelper;
+import com.app.models.Book;
 import com.app.models.Movie;
 import com.app.models.User;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by jgomes on 7/28/15.
+ * Created by jgomes on 8/3/15.
  */
-public class MovieHelperTest {
+public class ItemHelperTest {
     public String sampleTitle = "HARRY POTTER AND THE CHAMBER OF SECRETS";
+    public String sampleAuthor = "J.K. ROWLING";
     public Integer sampleYear = 2001;
-    public String sampleDirector = "J.K. ROWLING";
-    public Boolean sampleRated = true;
-    public Integer sampleRating = 7;
     public boolean sampleCheckedOut = false;
-
     public User sampleUser;
 
-    public MovieHelperTest() throws MalformedEnteredInformation {
+    public String sampleDirector = "Steven Spielberg";
+    public Boolean sampleRated = true;
+    public Integer sampleRating = 7;
+
+    @Before
+    public void feedItemHelper() throws MalformedEnteredInformation {
         this.sampleUser = new User("JOHANN GOMES", "JGBL@CIN.UFPE.BR",
                 "TENENTE JOAO CICERO STREET - BOA VIAGEM", "996702734", "123-4567", "1234");
+    }
+
+    @Test
+    public void testAddBook() {
+        BookHelper.eraseBookList();
+        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book);
+        Assert.assertEquals(BookHelper.getBooks().size(), 1);
+        Assert.assertEquals(BookHelper.getBooks().get(0).getTitle(), sampleTitle);
+    }
+
+    @Test
+    public void eraseBookList() {
+        BookHelper.eraseBookList();
+        Assert.assertEquals(BookHelper.getBooks().isEmpty(), true);
+    }
+
+    @Test
+    public void testAddManyBooks() {
+        BookHelper.eraseBookList();
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book1);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book2);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book3);
+
+        Assert.assertEquals(BookHelper.getBooks().size(), 3);
+        Assert.assertEquals(BookHelper.getBooks().get(1).getTitle(), "CRIME AND PUNISHMENT");
+        Assert.assertEquals(BookHelper.getBooks().get(1).getAuthor(), "FIODOR DOSTOIEVSKI");
+    }
+
+    @Test
+    public void checkOutBook() throws ItemNotFound, ItemIsAlreadyCheckedOut {
+        BookHelper.eraseBookList();
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book1);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, false, sampleUser);
+        BookHelper.addItem(book2);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book3);
+
+        ItemHelper.checkOutItem("CRIME AND PUNISHMENT", this.sampleUser);
+    }
+
+    @Test(expected = ItemNotFound.class)
+    public void checkOutBookNotFoundNotEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedOut {
+        BookHelper.eraseBookList();
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book1);
+
+        ItemHelper.checkOutItem("CRIME AND PUNISHMENT", this.sampleUser);
+    }
+
+    @Test(expected = ItemNotFound.class)
+    public void checkOutBookNotFoundEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedOut {
+        BookHelper.eraseBookList();
+
+        ItemHelper.checkOutItem("CRIME AND PUNISHMENT", this.sampleUser);
+    }
+
+    @Test
+    public void checkInBook() throws ItemNotFound, ItemIsAlreadyCheckedIn {
+        BookHelper.eraseBookList();
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book1);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, true, sampleUser);
+        BookHelper.addItem(book2);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book3);
+
+        ItemHelper.checkInItem("CRIME AND PUNISHMENT");
+    }
+
+    @Test(expected = ItemNotFound.class)
+    public void checkInBookNotFoundNotEmptyList()  throws ItemNotFound, ItemIsAlreadyCheckedIn {
+        BookHelper.eraseBookList();
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
+        BookHelper.addItem(book1);
+
+        ItemHelper.checkInItem("CRIME AND PUNISHMENT");
+    }
+
+    @Test(expected = ItemNotFound.class)
+    public void checkInBookNotFoundEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedIn {
+        BookHelper.eraseBookList();
+
+        ItemHelper.checkInItem("CRIME AND PUNISHMENT");
     }
 
     @Test
@@ -79,8 +172,8 @@ public class MovieHelperTest {
     }
 
     @Test
-    public void checkOutMovie() throws IllegalRatingValue, ItemIsAlreadyCheckedOut, ItemNotFound,
-            MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
+    public void checkOutMovie() throws IllegalRatingValue, ItemNotFound,
+            ItemIsAlreadyCheckedOut, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
         MovieHelper.eraseMovieList();
         Movie movie1 = new Movie(sampleTitle, sampleYear, sampleDirector, sampleRated,
                 sampleRating, sampleCheckedOut, sampleUser);
@@ -97,8 +190,7 @@ public class MovieHelperTest {
 
     @Test(expected = ItemNotFound.class)
     public void checkOutMovieNotFoundNotEmptyList() throws IllegalRatingValue,
-            MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating,
-            ItemIsAlreadyCheckedOut, ItemNotFound {
+            ItemNotFound, ItemIsAlreadyCheckedOut, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
         MovieHelper.eraseMovieList();
         Movie movie1 = new Movie(sampleTitle, sampleYear, sampleDirector, sampleRated,
                 sampleRating, sampleCheckedOut, sampleUser);
@@ -108,16 +200,16 @@ public class MovieHelperTest {
     }
 
     @Test(expected = ItemNotFound.class)
-    public void checkOutMovieNotFoundEmptyList() throws IllegalRatingValue, MovieNotRatedCantReceiveRating,
-    ItemNotFound, ItemIsAlreadyCheckedOut{
+    public void checkOutMovieNotFoundEmptyList() throws IllegalRatingValue,
+            ItemNotFound, ItemIsAlreadyCheckedOut {
         MovieHelper.eraseMovieList();
 
         ItemHelper.checkOutItem("THE SHINNING", this.sampleUser);
     }
 
     @Test
-    public void checkInMovie() throws IllegalRatingValue, ItemIsAlreadyCheckedIn,
-            ItemNotFound, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
+    public void checkInMovie() throws IllegalRatingValue,
+            ItemNotFound, ItemIsAlreadyCheckedIn, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
         MovieHelper.eraseMovieList();
         Movie movie1 = new Movie(sampleTitle, sampleYear, sampleDirector, sampleRated,
                 sampleRating, sampleCheckedOut, sampleUser);
@@ -133,8 +225,8 @@ public class MovieHelperTest {
     }
 
     @Test(expected = ItemNotFound.class)
-    public void checkInMovieNotFoundNotEmptyList()  throws IllegalRatingValue, ItemNotFound,
-            ItemIsAlreadyCheckedIn, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
+    public void checkInMovieNotFoundNotEmptyList()  throws IllegalRatingValue,
+            ItemNotFound, ItemIsAlreadyCheckedIn, MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating {
         MovieHelper.eraseMovieList();
         Movie movie1 = new Movie(sampleTitle, sampleYear, sampleDirector, sampleRated,
                 sampleRating, sampleCheckedOut, sampleUser);
@@ -144,7 +236,8 @@ public class MovieHelperTest {
     }
 
     @Test(expected = ItemNotFound.class)
-    public void checkInMovieNotFoundEmptyList() throws IllegalRatingValue, ItemIsAlreadyCheckedIn, ItemNotFound {
+    public void checkInMovieNotFoundEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedIn,
+            IllegalRatingValue {
         MovieHelper.eraseMovieList();
 
         ItemHelper.checkInItem("PULP FICTION");

@@ -1,8 +1,6 @@
 package com.test;
 
-import com.test.helpers.BookHelperTest;
-import com.test.helpers.MenuHelperTest;
-import com.test.helpers.MovieHelperTest;
+import com.test.helpers.*;
 import com.test.models.*;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
@@ -19,12 +17,13 @@ public class TestsRunner {
 
         testsRunner.junit.run(BookTest.class);
         testsRunner.junit.run(MovieTest.class);
-        testsRunner.junit.run(ItemTest.class);
         testsRunner.junit.run(LoginCredentialsTest.class);
         testsRunner.junit.run(UserTest.class);
 
-        testsRunner.junit.run(BookHelperTest.class);
-        testsRunner.junit.run(MovieHelperTest.class);
+//        testsRunner.junit.run(BookHelperTest.class);
+//        testsRunner.junit.run(MovieHelperTest.class);
+        testsRunner.junit.run(ItemHelperTest.class);
+        testsRunner.junit.run(UserHelperTest.class);
         testsRunner.junit.run(MenuHelperTest.class);
     }
 }

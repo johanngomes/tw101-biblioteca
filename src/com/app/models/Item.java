@@ -3,46 +3,19 @@ package com.app.models;
 /**
  * Created by jgomes on 7/28/15.
  */
-public class Item {
-    private String title;
-    private Integer year;
-    private Boolean checkedOut;
-    private User checkedOutBy = null;
 
-    public Item(String title, Integer year, Boolean checkedOut) {
-        this.setTitle(title);
-        this.setYear(year);
-        this.setCheckedOut(checkedOut);
-    }
+interface Item {
+    String getTitle();
+    void setTitle(String title);
 
-    public String getTitle() {
-        return title;
-    }
+    Integer getYear();
+    void setYear(Integer year);
 
-    public void setTitle(String title) {
-        this.title = title.toUpperCase();
-    }
+    boolean isCheckedOut();
 
-    public Integer getYear() {
-        return year;
-    }
+    void setCheckedOut(Boolean checkedOut);
+    Boolean getCheckedOut();
 
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public boolean isCheckedOut() {
-        return checkedOut;
-    }
-
-    public void setCheckedOut(Boolean checkedOut) {
-        this.checkedOut = checkedOut;
-    }
-
-    public Boolean getCheckedOut() { return checkedOut; }
-
-    public void setCheckedOutBy(User user) { this.checkedOutBy = user; }
-
-    public User getCheckedOutBy() { return checkedOutBy; }
-
+    void setCheckedOutBy(User user);
+    User getCheckedOutBy();
 }

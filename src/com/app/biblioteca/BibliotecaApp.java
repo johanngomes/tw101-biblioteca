@@ -1,20 +1,31 @@
 package com.app.biblioteca;
 
-import com.app.exceptions.BookIsAlreadyCheckedIn;
-import com.app.exceptions.BookIsAlreadyCheckedOut;
-import com.app.exceptions.BookNotFound;
-import com.app.exceptions.NoBookRegisteredInSystem;
-import com.app.exceptions.OptionNotAvailable;
+import com.app.exceptions.*;
 import com.app.helpers.MenuHelper;
 import com.app.seeds.BookSeed;
+import com.app.seeds.MovieSeed;
+import com.app.seeds.UserSeed;
+
 import java.util.Scanner;
 
 public class BibliotecaApp {
 
     private static Scanner userInput = new Scanner(System.in);
 
-    public static void main(String[] args) throws BookIsAlreadyCheckedIn, BookIsAlreadyCheckedOut,
-            BookNotFound, NoBookRegisteredInSystem, OptionNotAvailable {
+    private static void feedMovieHelper() throws MalformedEnteredInformation,
+            IllegalRatingValue, MovieRatedMustReceiveRating,
+            MovieNotRatedCantReceiveRating {
+
+        UserSeed.feedUserHelper();
+        BookSeed.feedBookHelper();
+        MovieSeed.feedMovieHelper();
+
+    }
+
+    public static void main(String[] args) throws ItemIsAlreadyCheckedIn, ItemIsAlreadyCheckedOut,
+            ItemNotFound, ItemNotRegistered, OptionNotAvailable, MalformedEnteredInformation,
+            MovieNotRatedCantReceiveRating, MovieRatedMustReceiveRating, IllegalRatingValue
+    {
         BookSeed.feedBookHelper();
 
         System.out.println("" +
@@ -28,6 +39,8 @@ public class BibliotecaApp {
         );
 
         System.out.println("\n\n** Welcome! **\n\n");
+
+        feedMovieHelper();
 
         MenuHelper.buildMainOptionsMenu();
 

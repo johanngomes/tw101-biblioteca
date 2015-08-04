@@ -5,7 +5,7 @@ import com.app.exceptions.MalformedEnteredInformation;
 /**
  * Created by jgomes on 7/28/15.
  */
-public class User extends LoginCredentials{
+public class User extends LoginCredentials {
     private String name;
     private String email;
     private String address;

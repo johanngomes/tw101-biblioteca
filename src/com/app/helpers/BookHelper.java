@@ -1,8 +1,8 @@
 package com.app.helpers;
 
-import com.app.exceptions.BookIsAlreadyCheckedIn;
-import com.app.exceptions.BookIsAlreadyCheckedOut;
-import com.app.exceptions.BookNotFound;
+import com.app.exceptions.ItemIsAlreadyCheckedIn;
+import com.app.exceptions.ItemIsAlreadyCheckedOut;
+import com.app.exceptions.ItemNotFound;
 import com.app.models.Book;
 import com.app.models.User;
 
@@ -26,12 +26,12 @@ public class BookHelper {
         books.clear();
     }
 
-    public static void checkInBook(String title) throws BookIsAlreadyCheckedIn, BookNotFound {
+    public static void checkInBook(String title) throws ItemIsAlreadyCheckedIn, ItemNotFound {
 
         for (Book book : books) {
             if ( book.getTitle().equals(title.toUpperCase()) ) {
                 if ( book.isCheckedOut() == false ) {
-                    throw new BookIsAlreadyCheckedIn(String.format("%s is already checked in! You can' check in " +
+                    throw new ItemIsAlreadyCheckedIn(String.format("%s is already checked in! You can' check in " +
                             "this book.", title.toUpperCase()));
                 }
                 else {
@@ -42,16 +42,16 @@ public class BookHelper {
             }
         }
 
-        throw new BookNotFound(String.format("%s not found in the library!", title.toUpperCase()));
+        throw new ItemNotFound(String.format("%s not found in the library!", title.toUpperCase()));
 
     }
 
-    public static void checkOutBook(String title, User user) throws BookIsAlreadyCheckedOut, BookNotFound{
+    public static void checkOutBook(String title, User user) throws ItemIsAlreadyCheckedOut, ItemNotFound {
 
         for (Book book : books) {
             if ( book.getTitle().equals(title.toUpperCase()) ) {
                 if ( book.isCheckedOut() == true ) {
-                    throw new BookIsAlreadyCheckedOut(String.format("%s is already checked out! You can' check out " +
+                    throw new ItemIsAlreadyCheckedOut(String.format("%s is already checked out! You can' check out " +
                             "this book.", title.toUpperCase()));
                 }
                 else {
@@ -62,7 +62,7 @@ public class BookHelper {
             }
         }
 
-        throw new BookNotFound(String.format("%s not found in the library!", title.toUpperCase()));
+        throw new ItemNotFound(String.format("%s not found in the library!", title.toUpperCase()));
 
     }
 }

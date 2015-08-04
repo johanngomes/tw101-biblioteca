@@ -1,8 +1,10 @@
 package com.app.helpers;
 
-import com.app.exceptions.NoBookRegisteredInSystem;
+import com.app.exceptions.ItemNotRegistered;
 import com.app.exceptions.OptionNotAvailable;
+import com.app.exceptions.InvalidLogin;
 import com.app.models.Book;
+import com.app.models.Movie;
 import com.app.models.User;
 
 import java.util.ArrayList;
@@ -19,18 +21,22 @@ public class MenuHelper {
     }
 
     private static Scanner userInput = new Scanner(System.in);
-    private static ArrayList<String> mainOptions = new ArrayList(Arrays.asList("LIST BOOKS", "RETURN BOOK"));
+    private static ArrayList<String> mainOptions = new ArrayList(Arrays.asList("LIST BOOKS",
+            "RETURN BOOK", "LIST MOVIES", "RETURN MOVIE", "CHECK MY INFORMATION"));
 
     private static User loggedUser = null;
 
-    public static void buildLoginScreen() {
-
-        //TO DO
-        //in this method, loggedUser must receive an User object of the User autheticated
-
+    public static void buildLoginScreen(String name, String password)
+            throws InvalidLogin {
+        try {
+            loggedUser = UserHelper.loginUser(name, password);
+            buildMainOptionsMenu();
+        } catch ( Exception UserCredentialsInvalid ) {
+            System.out.println("[!] User not identified. Check your username and/or password!");
+        }
     }
 
-    public static void buildMainOptionsMenu() throws NoBookRegisteredInSystem, OptionNotAvailable{
+    public static void buildMainOptionsMenu() throws ItemNotRegistered, OptionNotAvailable{
 
         int optionNumber = 1;
 
@@ -45,7 +51,7 @@ public class MenuHelper {
 
     }
 
-    public static void chooseMainOptionsMenu(int currentInput) throws NoBookRegisteredInSystem, OptionNotAvailable{
+    public static void chooseMainOptionsMenu(int currentInput) throws ItemNotRegistered, OptionNotAvailable{
 
         if (currentInput < 1 || currentInput > mainOptions.size()) {
             throw new OptionNotAvailable("[ERROR] Option not available.");
@@ -54,12 +60,65 @@ public class MenuHelper {
                 buildListBooksMenu(Action.CHECK_OUT);
             } else if (currentInput == 2) {
                 buildListBooksMenu(Action.CHECK_IN);
+            } else if (currentInput == 4) {
+                buildListMovies(Action.CHECK_OUT);
+            } else if (currentInput == 5) {
+                buildListMovies(Action.CHECK_IN);
+            } else if (currentInput == 6) {
+                buildUserInformationMenu();
             }
         }
 
     }
 
-    public static void buildListBooksMenu(Action action) throws NoBookRegisteredInSystem, OptionNotAvailable{
+    public static void buildListMovies(Action action) throws ItemNotRegistered, OptionNotAvailable {
+        System.out.println("\n\n---------------------------------------------\n" +
+                "* Movie Title * Year * Director * Rating * Option *\n" +
+                "---------------------------------------------\n");
+
+        if (!MovieHelper.getMovies().isEmpty()) {
+            int movieNumber = 1;
+
+            for ( Movie movie : MovieHelper.getMovies() ) {
+                System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
+                        movie.getTitle(), movie.getYear(), movie.getDirector(), movie.getRating(), movieNumber));
+
+                movieNumber++;
+            }
+        } else {
+            throw new ItemNotRegistered("No movie(s) registered in the system.");
+        }
+
+        Integer currentInput = Integer.parseInt(userInput.next());
+        chooseListMoviesMenu(currentInput, action);
+    }
+
+    public static void chooseListMoviesMenu(int currentInput, Action action)
+            throws ItemNotRegistered, OptionNotAvailable{
+
+        if (currentInput < 1 || (currentInput > MovieHelper.getMovies().size() - 1)) {
+            throw new OptionNotAvailable("[ERROR] Option not available.");
+        } else {
+            String movieSelected = MovieHelper.getMovies().get(currentInput - 1).getTitle();
+            if (action == Action.CHECK_OUT) {
+                try {
+                    ItemHelper.checkOutItem(movieSelected, loggedUser);
+                    MenuHelper.buildCheckOutMessage(true, movieSelected);
+                } catch (Exception BookIsAlreadyCheckedOut) {
+                    MenuHelper.buildCheckOutMessage(false, movieSelected);
+                }
+            } else if (action == Action.CHECK_IN) {
+                try {
+                    ItemHelper.checkInItem(movieSelected);
+                    MenuHelper.buildCheckInMessage(true, movieSelected);
+                } catch (Exception BookIsAlreadyCheckedOut) {
+                    MenuHelper.buildCheckInMessage(false, movieSelected);
+                }
+            }
+        }
+    }
+
+    public static void buildListBooksMenu(Action action) throws ItemNotRegistered, OptionNotAvailable {
 
         System.out.println("\n\n---------------------------------------------\n" +
                 "* Book Title * Author * Year * Option *\n" +
@@ -75,7 +134,7 @@ public class MenuHelper {
                 bookNumber++;
             }
         } else {
-            throw new NoBookRegisteredInSystem("No book(s) registered in the system.");
+            throw new ItemNotRegistered("No book(s) registered in the system.");
         }
 
         Integer currentInput = Integer.parseInt(userInput.next());
@@ -84,7 +143,7 @@ public class MenuHelper {
     }
 
     public static void chooseListBooksMenu(int currentInput, Action action)
-            throws NoBookRegisteredInSystem, OptionNotAvailable{
+            throws ItemNotRegistered, OptionNotAvailable{
 
         if (currentInput < 1 || (currentInput > BookHelper.getBooks().size() - 1)) {
             throw new OptionNotAvailable("[ERROR] Option not available.");
@@ -126,5 +185,14 @@ public class MenuHelper {
                     "BECAUSE IT WAS NOT CHECKED OUT!\n\n", bookName));
         }
 
+    }
+
+    public static void buildUserInformationMenu() throws ItemNotRegistered, OptionNotAvailable {
+        System.out.println("\n\n---------------------------------------------\n" +
+                "* Name * Email * Address * Phone Number *\n" +
+                "---------------------------------------------\n");
+        System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
+                loggedUser.getName(), loggedUser.getEmail(), loggedUser.getAddress(), loggedUser.getPhoneNumber()));
+        buildMainOptionsMenu();
     }
 }

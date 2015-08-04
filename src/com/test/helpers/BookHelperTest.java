@@ -1,8 +1,8 @@
 package com.test.helpers;
 
-import com.app.exceptions.BookIsAlreadyCheckedIn;
-import com.app.exceptions.BookIsAlreadyCheckedOut;
-import com.app.exceptions.BookNotFound;
+import com.app.exceptions.ItemIsAlreadyCheckedIn;
+import com.app.exceptions.ItemIsAlreadyCheckedOut;
+import com.app.exceptions.ItemNotFound;
 import com.app.exceptions.MalformedEnteredInformation;
 import com.app.helpers.BookHelper;
 import com.app.models.Book;
@@ -29,7 +29,7 @@ public class BookHelperTest {
     @Test
     public void testAddBook() {
         BookHelper.eraseBookList();
-        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book);
         Assert.assertEquals(BookHelper.getBooks().size(), 1);
         Assert.assertEquals(BookHelper.getBooks().get(0).getTitle(), sampleTitle);
@@ -44,11 +44,11 @@ public class BookHelperTest {
     @Test
     public void testAddManyBooks() {
         BookHelper.eraseBookList();
-        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book1);
-        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, sampleCheckedOut);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book2);
-        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book3);
 
         Assert.assertEquals(BookHelper.getBooks().size(), 3);
@@ -57,58 +57,58 @@ public class BookHelperTest {
     }
 
     @Test
-    public void checkOutBook() throws BookNotFound, BookIsAlreadyCheckedOut {
+    public void checkOutBook() throws ItemNotFound, ItemIsAlreadyCheckedOut {
         BookHelper.eraseBookList();
-        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book1);
-        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, false);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, false, sampleUser);
         BookHelper.addItem(book2);
-        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book3);
 
         BookHelper.checkOutBook("CRIME AND PUNISHMENT", this.sampleUser);
     }
 
-    @Test(expected = BookNotFound.class)
-    public void checkOutBookNotFoundNotEmptyList() throws BookNotFound, BookIsAlreadyCheckedOut {
+    @Test(expected = ItemNotFound.class)
+    public void checkOutBookNotFoundNotEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedOut {
         BookHelper.eraseBookList();
-        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book1);
 
         BookHelper.checkOutBook("CRIME AND PUNISHMENT", this.sampleUser);
     }
 
-    @Test(expected = BookNotFound.class)
-    public void checkOutBookNotFoundEmptyList() throws BookNotFound, BookIsAlreadyCheckedOut {
+    @Test(expected = ItemNotFound.class)
+    public void checkOutBookNotFoundEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedOut {
         BookHelper.eraseBookList();
 
         BookHelper.checkOutBook("CRIME AND PUNISHMENT", this.sampleUser);
     }
 
     @Test
-    public void checkInBook() throws BookNotFound, BookIsAlreadyCheckedIn {
+    public void checkInBook() throws ItemNotFound, ItemIsAlreadyCheckedIn {
         BookHelper.eraseBookList();
-        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book1);
-        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, true);
+        Book book2 = new Book("CRIME AND PUNISHMENT", "FIODOR DOSTOIEVSKI", 1888, true, sampleUser);
         BookHelper.addItem(book2);
-        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut);
+        Book book3 = new Book("LEITE DERRAMADO", "CHICO BUARQUE", 2007, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book3);
 
         BookHelper.checkInBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected = BookNotFound.class)
-    public void checkInBookNotFoundNotEmptyList()  throws BookNotFound, BookIsAlreadyCheckedIn {
+    @Test(expected = ItemNotFound.class)
+    public void checkInBookNotFoundNotEmptyList()  throws ItemNotFound, ItemIsAlreadyCheckedIn {
         BookHelper.eraseBookList();
-        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut);
+        Book book1 = new Book(sampleTitle, sampleAuthor, sampleYear, sampleCheckedOut, sampleUser);
         BookHelper.addItem(book1);
 
         BookHelper.checkInBook("CRIME AND PUNISHMENT");
     }
 
-    @Test(expected = BookNotFound.class)
-    public void checkInBookNotFoundEmptyList() throws BookNotFound, BookIsAlreadyCheckedIn {
+    @Test(expected = ItemNotFound.class)
+    public void checkInBookNotFoundEmptyList() throws ItemNotFound, ItemIsAlreadyCheckedIn {
         BookHelper.eraseBookList();
 
         BookHelper.checkInBook("CRIME AND PUNISHMENT");

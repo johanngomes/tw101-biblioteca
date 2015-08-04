@@ -7,6 +7,7 @@ import com.app.exceptions.MalformedEnteredInformation;
  * Created by jgomes on 7/28/15.
  */
 public class LoginCredentials {
+
     private String libraryNumber;
     private String password;
 

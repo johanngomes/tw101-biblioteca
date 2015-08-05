@@ -61,9 +61,9 @@ public class MenuHelper {
             } else if (currentInput == 2) {
                 buildListBooksMenu(Action.CHECK_IN);
             } else if (currentInput == 4) {
-                buildListMovies(Action.CHECK_OUT);
+                buildListMoviesMenu(Action.CHECK_OUT);
             } else if (currentInput == 5) {
-                buildListMovies(Action.CHECK_IN);
+                buildListMoviesMenu(Action.CHECK_IN);
             } else if (currentInput == 6) {
                 buildUserInformationMenu();
             }
@@ -71,7 +71,7 @@ public class MenuHelper {
 
     }
 
-    public static void buildListMovies(Action action) throws ItemNotRegistered, OptionNotAvailable {
+    public static void buildListMoviesMenu(Action action) throws ItemNotRegistered, OptionNotAvailable {
         System.out.println("\n\n---------------------------------------------\n" +
                 "* Movie Title * Year * Director * Rating * Option *\n" +
                 "---------------------------------------------\n");
@@ -80,8 +80,17 @@ public class MenuHelper {
             int movieNumber = 1;
 
             for ( Movie movie : MovieHelper.getMovies() ) {
-                System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
-                        movie.getTitle(), movie.getYear(), movie.getDirector(), movie.getRating(), movieNumber));
+                if ( action == Action.CHECK_OUT ) {
+                    if ( !movie.isCheckedOut() ) {
+                        System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
+                                movie.getTitle(), movie.getYear(), movie.getDirector(), movie.getRating(), movieNumber));
+                    }
+                } else if ( action == Action.CHECK_IN ) {
+                    if ( movie.isCheckedOut() ) {
+                        System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK IN ]",
+                                movie.getTitle(), movie.getYear(), movie.getDirector(), movie.getRating(), movieNumber));
+                    }
+                }
 
                 movieNumber++;
             }
@@ -128,8 +137,18 @@ public class MenuHelper {
             int bookNumber = 1;
 
             for ( Book book : BookHelper.getBooks() ) {
-                System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
-                        book.getTitle(), book.getAuthor(), book.getYear(), bookNumber));
+                if ( action == Action.CHECK_OUT ) {
+                    if ( !book.isCheckedOut() ) {
+                        System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK IN ]",
+                                book.getTitle(), book.getAuthor(), book.getYear(), bookNumber));
+                    }
+
+                } else if ( action == Action.CHECK_IN ) {
+                    if ( !book.isCheckedOut() ) {
+                        System.out.println(String.format("* %s * %s * %d * [ Press %d to CHECK OUT ]",
+                                book.getTitle(), book.getAuthor(), book.getYear(), bookNumber));
+                    }
+                }
 
                 bookNumber++;
             }

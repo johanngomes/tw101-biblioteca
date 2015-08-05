@@ -12,7 +12,7 @@ public class BibliotecaApp {
 
     private static Scanner userInput = new Scanner(System.in);
 
-    private static void feedMovieHelper() throws MalformedEnteredInformation,
+    private static void feedAppWithData() throws MalformedEnteredInformation,
             IllegalRatingValue, MovieRatedMustReceiveRating,
             MovieNotRatedCantReceiveRating {
 
@@ -29,20 +29,23 @@ public class BibliotecaApp {
         BookSeed.feedBookHelper();
 
         System.out.println("" +
-                "██████╗ ██████╗ ██╗     ███╗   ███╗███████╗\n" +
-                "██╔══██╗██╔══██╗██║     ████╗ ████║██╔════╝\n" +
-                "██████╔╝██████╔╝██║     ██╔████╔██║███████╗\n" +
-                "██╔══██╗██╔═══╝ ██║     ██║╚██╔╝██║╚════██║\n" +
-                "██████╔╝██║     ███████╗██║ ╚═╝ ██║███████║\n" +
-                "╚═════╝ ╚═╝     ╚══════╝╚═╝     ╚═╝╚══════╝\n" +
-                "BANGALORE PUBLIC LIBRARY MANAGEMENT SYSTEM"
+                        "██████╗ ██████╗ ██╗     ███╗   ███╗███████╗\n" +
+                        "██╔══██╗██╔══██╗██║     ████╗ ████║██╔════╝\n" +
+                        "██████╔╝██████╔╝██║     ██╔████╔██║███████╗\n" +
+                        "██╔══██╗██╔═══╝ ██║     ██║╚██╔╝██║╚════██║\n" +
+                        "██████╔╝██║     ███████╗██║ ╚═╝ ██║███████║\n" +
+                        "╚═════╝ ╚═╝     ╚══════╝╚═╝     ╚═╝╚══════╝\n" +
+                        "BANGALORE PUBLIC LIBRARY MANAGEMENT SYSTEM"
         );
 
         System.out.println("\n\n** Welcome! **\n\n");
 
-        feedMovieHelper();
+        feedAppWithData();
 
-        MenuHelper.buildMainOptionsMenu();
+        while ( true ) {
+            MenuHelper.buildMainOptionsMenu();
+        }
+
 
     }
 }
